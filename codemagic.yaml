@@ -4,21 +4,24 @@ workflows:
 
     environment:
       java: 17
-      android: true
+
+    cache:
+      cache_paths:
+        - ~/.gradle/caches
+        - ~/.gradle/wrapper
 
     scripts:
-      - name: Check files
+      - name: Check project files
         script: ls -la
 
-      - name: Install Gradle
-        script: |
-          sdkmanager "platform-tools" "platforms;android-36"
+      - name: Give permission to gradlew
+        script: chmod +x gradlew
 
-      - name: Make gradle wrapper (fix)
-        script: gradle wrapper || true
+      - name: Clean project
+        script: ./gradlew clean
 
       - name: Build Debug APK
-        script: gradle assembleDebug
+        script: ./gradlew assembleDebug
 
     artifacts:
       - app/build/outputs/apk/debug/*.apk
