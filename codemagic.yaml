@@ -13,10 +13,10 @@ workflows:
         - ~/.gradle/wrapper
 
     scripts:
-      - name: Show files
+      - name: Show project files
         script: ls -la
 
-      - name: Give permission to gradlew
+      - name: Make gradlew executable
         script: chmod +x gradlew
 
       - name: Clean project
@@ -25,8 +25,13 @@ workflows:
       - name: Build Debug APK
         script: ./gradlew assembleDebug
 
+      # Optional: release build (only works if keystore env is set)
+      - name: Build Release APK
+        script: ./gradlew assembleRelease || true
+
     artifacts:
       - app/build/outputs/apk/debug/*.apk
+      - app/build/outputs/apk/release/*.apk
 
     publishing:
       email:
