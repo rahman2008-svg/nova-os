@@ -21,6 +21,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // ONLY RELEASE SIGNING (SAFE & CLEAN)
     signingConfigs {
         create("release") {
             val keystorePath =
@@ -31,17 +32,10 @@ android {
             keyAlias = "upload"
             keyPassword = System.getenv("KEY_PASSWORD")
         }
-
-        create("debug") {
-            // local debug keystore (safe for CI)
-            storeFile = file("${rootDir}/debug.keystore")
-            storePassword = "android"
-            keyAlias = "androiddebugkey"
-            keyPassword = "android"
-        }
     }
 
     buildTypes {
+
         release {
             isMinifyEnabled = false
             isCrunchPngs = false
@@ -51,16 +45,15 @@ android {
                 "proguard-rules.pro"
             )
 
-            // only release uses release signing
             signingConfig = signingConfigs.getByName("release")
         }
 
         debug {
             isMinifyEnabled = false
 
-            // IMPORTANT FIX:
-            // never use release keystore in debug
-            signingConfig = signingConfigs.getByName("debug")
+            // IMPORTANT:
+            // NO SIGNING CONFIG HERE = NO CONFLICT EVER
+            // Uses default Android debug keystore automatically
         }
     }
 
@@ -81,7 +74,7 @@ android {
     }
 }
 
-// Secrets plugin
+// Secrets plugin (safe config)
 secrets {
     propertiesFileName = ".env"
     defaultPropertiesFileName = ".env.example"
