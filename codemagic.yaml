@@ -1,9 +1,13 @@
 workflows:
   nova-os-android:
-    name: Nova OS Build (Debug Only)
+    name: Nova OS Android CI/CD
+
+    max_build_duration: 60
 
     environment:
       java: 17
+      groups:
+        - keystore_credentials
 
     cache:
       cache_paths:
@@ -11,14 +15,24 @@ workflows:
         - ~/.gradle/wrapper
 
     scripts:
-      - name: Give permission
+      - name: Set permissions
         script: chmod +x gradlew
 
-      - name: Clean
+      - name: Clean project
         script: ./gradlew clean
 
       - name: Build Debug APK
         script: ./gradlew assembleDebug
 
+      # Optional Release build (only works if keystore set)
+      - name: Build Release APK
+        script: ./gradlew assembleRelease || true
+
     artifacts:
       - app/build/outputs/apk/debug/*.apk
+      - app/build/outputs/apk/release/*.apk
+
+    publishing:
+      email:
+        recipients:
+          - your-email@example.com
