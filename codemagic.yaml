@@ -25,7 +25,7 @@ workflows:
       - name: Build Debug APK
         script: ./gradlew assembleDebug
 
-      # Optional: release build (only works if keystore env is set)
+      # Optional release build (ONLY works if keystore env is set)
       - name: Build Release APK
         script: ./gradlew assembleRelease || true
 
