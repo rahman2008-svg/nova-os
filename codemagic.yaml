@@ -1,14 +1,8 @@
 workflows:
   nova-os-android:
-    name: Nova OS Android Build
-    max_build_duration: 60
+    name: Nova OS Build (Debug Only)
 
     environment:
-      android_signing:
-        - keystore_reference
-      vars:
-        PACKAGE_NAME: "com.nova.os"
-
       java: 17
 
     cache:
@@ -17,10 +11,10 @@ workflows:
         - ~/.gradle/wrapper
 
     scripts:
-      - name: Set permissions
+      - name: Give permission
         script: chmod +x gradlew
 
-      - name: Clean project
+      - name: Clean
         script: ./gradlew clean
 
       - name: Build Debug APK
@@ -28,8 +22,3 @@ workflows:
 
     artifacts:
       - app/build/outputs/apk/debug/*.apk
-
-    publishing:
-      email:
-        recipients:
-          - your-email@example.com
