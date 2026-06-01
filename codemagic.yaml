@@ -1,6 +1,8 @@
 workflows:
   nova-os:
-    name: Nova OS Build
+    name: Nova OS Android Build
+
+    max_build_duration: 60
 
     environment:
       java: 17
@@ -11,7 +13,7 @@ workflows:
         - ~/.gradle/wrapper
 
     scripts:
-      - name: Check project files
+      - name: Show files
         script: ls -la
 
       - name: Give permission to gradlew
@@ -25,3 +27,8 @@ workflows:
 
     artifacts:
       - app/build/outputs/apk/debug/*.apk
+
+    publishing:
+      email:
+        recipients:
+          - your-email@example.com
