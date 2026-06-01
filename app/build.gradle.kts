@@ -31,6 +31,14 @@ android {
             keyAlias = "upload"
             keyPassword = System.getenv("KEY_PASSWORD")
         }
+
+        create("debug") {
+            // local debug keystore (safe for CI)
+            storeFile = file("${rootDir}/debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
     }
 
     buildTypes {
@@ -43,14 +51,16 @@ android {
                 "proguard-rules.pro"
             )
 
+            // only release uses release signing
             signingConfig = signingConfigs.getByName("release")
         }
 
         debug {
             isMinifyEnabled = false
 
-            // CI/CD safe (Codemagic friendly)
-            signingConfig = signingConfigs.getByName("release")
+            // IMPORTANT FIX:
+            // never use release keystore in debug
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
@@ -71,7 +81,7 @@ android {
     }
 }
 
-// Secrets plugin (env support)
+// Secrets plugin
 secrets {
     propertiesFileName = ".env"
     defaultPropertiesFileName = ".env.example"
