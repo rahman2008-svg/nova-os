@@ -1,38 +1,24 @@
 workflows:
-  nova-os-android:
-    name: Nova OS Android CI/CD
-
-    max_build_duration: 60
+  nova-os:
+    name: Nova OS Build
 
     environment:
       java: 17
-      groups:
-        - keystore_credentials
-
-    cache:
-      cache_paths:
-        - ~/.gradle/caches
-        - ~/.gradle/wrapper
+      android: true
 
     scripts:
-      - name: Set permissions
-        script: chmod +x gradlew
+      - name: Check files
+        script: ls -la
 
-      - name: Clean project
-        script: ./gradlew clean
+      - name: Install Gradle
+        script: |
+          sdkmanager "platform-tools" "platforms;android-36"
+
+      - name: Make gradle wrapper (fix)
+        script: gradle wrapper || true
 
       - name: Build Debug APK
-        script: ./gradlew assembleDebug
-
-      # Optional Release build (only works if keystore set)
-      - name: Build Release APK
-        script: ./gradlew assembleRelease || true
+        script: gradle assembleDebug
 
     artifacts:
       - app/build/outputs/apk/debug/*.apk
-      - app/build/outputs/apk/release/*.apk
-
-    publishing:
-      email:
-        recipients:
-          - your-email@example.com
