@@ -1,0 +1,6 @@
+{
+  "name": "Nova OS",
+  "description": "An iOS + Nothing OS + AI-like Smart Home Screen Operating Layer featuring Live Layer Dashboard, Focus Mode, Smart memory, Private Vault, Gestures, Custom widgets & Dynamic glassmorphism.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
